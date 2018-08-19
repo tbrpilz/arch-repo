@@ -1,17 +1,17 @@
 #!/bin/env bash
 
-pkgbuilds="pkg"
+pkg="pkg"
 repo="repo"
 root=$PWD
 
-cd $pkgbuilds
+cd $pkg
 
-for package in $(ls $root/pkg)
+for package in $(ls $root/$pkg)
 do
 	cd $package
 
-	#Create package
-	makepkg -s --noconfirm
+	#Create package binary
+	makepkg -s -c --noconfirm
 
 	#Add package information to repo
 	repo-add "$root/$repo/lnclt.db.tar.xz" *.pkg.tar.gz
@@ -20,6 +20,5 @@ do
 	mv *.pkg.tar.gz "$root/$repo/"
 
 	#Clean up
-	rm -rf {pkg,src}
-	cd $start_dir
+	cd $root
 done

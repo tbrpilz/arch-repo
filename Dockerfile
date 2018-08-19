@@ -1,6 +1,8 @@
 FROM archlinux/base
 
-VOLUME /repo
+# Create volumes and copy pkg folder
+RUN mkdir -p /repo
+VOLUME ./repo /repo
 COPY ./pkg /pkg
 
 # Update Arch & install dependencies
@@ -12,7 +14,6 @@ RUN useradd builduser -m \
  && passwd -d builduser \
  && printf "builduser ALL=(ALL) ALL\n" | tee -a /etc/sudoers \
  && chown -R builduser {/repo,/pkg,/tmp}
-
 USER builduser
 
 # Install aurutils
@@ -25,4 +26,5 @@ RUN cd /tmp \
 
 # Build packages and add to repository file
 COPY ./build_packages.sh /build_packages.sh
-CMD bash build_packages.sh
+CMD bash
+# CMD bash build_packages.sh
