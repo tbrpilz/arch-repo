@@ -1,24 +1,17 @@
 FROM archlinux/base
 
 VOLUME /repo
-
-# Add PKGBUILDs
 COPY ./pkg /pkg
 
-# Add build script
-COPY ./build_packages.sh /build_packages.sh
-
-# Append lcnlt repository location to pacman.conf
-RUN printf "[lnclt]\nSigLevel = Optional TrustAll\nServer = https://arch.lnc.lt/repo" >> /etc/pacman.conf
-
 # Update Arch & install dependencies
+COPY ./pacman.conf /etc/pacman.conf
 RUN pacman -Syu --noconfirm base-devel wget sudo
 
 # Add builduser with passwordless sudo rights
 RUN useradd builduser -m \
  && passwd -d builduser \
  && printf "builduser ALL=(ALL) ALL\n" | tee -a /etc/sudoers \
- && chown -R builduser {/repo,/pkg}
+ && chown -R builduser {/repo,/pkg,/tmp}
 
 USER builduser
 
@@ -31,4 +24,5 @@ RUN cd /tmp \
  && makepkg -sci --noconfirm
 
 # Build packages and add to repository file
+COPY ./build_packages.sh /build_packages.sh
 CMD bash build_packages.sh
