@@ -11,8 +11,10 @@ This repository contains PKGBUILDs for all the packages on https://arch.lnc.lt a
 * On host system
   Dependencies:
 	* Arch Linux
-	* base-devel package group installed
+	* base-devel, wget, and a non-root user for installing packages
 	* aurutils (aur)
 	Run `./build_packages.sh`. Ensure the proper pkg and repo paths are set inside the script.
+	By default, it assumes a `pkg` folder full of package folders, which in turn contain the PKGBUILDS,
+	as well as a `repo` folder, which is where the repostiory files and package binaries are saved.
 
 
