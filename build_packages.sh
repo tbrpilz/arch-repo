@@ -4,14 +4,14 @@ pkg="pkg"
 repo="repo"
 root=$PWD
 
-cd $pkg
+cd "$root/$pkg"
 
-for package in $(ls $root/$pkg)
+# Get absolute paths for package locations
+for package in $(readlink -f $(ls))
 do
+	#Create package
 	cd $package
-
-	#Create package binary
-	makepkg -s -c --noconfirm
+	makepkg -s --noconfirm
 
 	#Add package information to repo
 	repo-add "$root/$repo/lnclt.db.tar.xz" *.pkg.tar.gz
@@ -20,5 +20,5 @@ do
 	mv *.pkg.tar.gz "$root/$repo/"
 
 	#Clean up
-	cd $root
+	rm -rf {pkg,src}
 done
