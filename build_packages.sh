@@ -1,16 +1,16 @@
 #!/bin/env bash
 
-pkgbuilds="pkg"
+pkg="pkg"
 repo="repo"
 root=$PWD
 
-cd $pkgbuilds
+cd "$root/$pkg"
 
-for package in $(ls $root/pkg)
+# Get absolute paths for package locations
+for package in $(readlink -f $(ls))
 do
-	cd $package
-
 	#Create package
+	cd $package
 	makepkg -s --noconfirm
 
 	#Add package information to repo
@@ -21,5 +21,4 @@ do
 
 	#Clean up
 	rm -rf {pkg,src}
-	cd $start_dir
 done
