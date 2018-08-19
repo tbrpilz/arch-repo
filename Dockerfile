@@ -2,7 +2,7 @@ FROM archlinux/base
 
 # Set up volumes
 VOLUME ./repo /repo
-VOLUME ./pkg /pkg
+COPY ./pkg /pkg
 
 # Apply custom config for pacman and makepkg
 COPY ./pacman.conf /etc/pacman.conf
